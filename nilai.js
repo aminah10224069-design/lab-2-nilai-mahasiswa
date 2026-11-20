@@ -9,39 +9,68 @@
 // Uji di Console browser, mis.: tentukanGrade(84.9)  -> 'B'
 // =============================================================
 
+// =============================================================
+// nilai.js - LOGIKA hitung nilai, berjalan di BROWSER
+// =============================================================
+
 function hitungNilaiAkhir(tugas, uts, uas) {
-  // TODO: salin dari Lab 1
-  return 0;
+  const hasil = (0.3 * tugas) + (0.3 * uts) + (0.4 * uas);
+  return Math.round(hasil * 100) / 100;
 }
 
 function tentukanGrade(nilai) {
-  // TODO: salin dari Lab 1
-  return '?';
+  if (nilai >= 85) return 'A';
+  if (nilai >= 70) return 'B';
+  if (nilai >= 60) return 'C';
+  if (nilai >= 50) return 'D';
+  return 'E';
 }
 
 function buatRekap(daftar) {
-  // TODO: salin dari Lab 1 (map + spread, tambah nilaiAkhir, grade, lulus)
-  return daftar;
+  return daftar.map((mhs) => {
+    const nilaiAkhir = hitungNilaiAkhir(mhs.tugas, mhs.uts, mhs.uas);
+    const grade = tentukanGrade(nilaiAkhir);
+    const lulus = nilaiAkhir >= 60;
+    return {
+      ...mhs,
+      nilaiAkhir,
+      grade,
+      lulus
+    };
+  });
 }
 
 function hitungRataRata(rekap) {
-  // TODO: salin dari Lab 1
-  return 0;
+  if (!rekap || rekap.length === 0) return 0;
+  const total = rekap.reduce((acc, mhs) => acc + mhs.nilaiAkhir, 0);
+  return Math.round((total / rekap.length) * 10) / 10;
 }
 
 function cariTertinggi(rekap) {
-  // TODO: salin dari Lab 1. Tambahkan: jika rekap kosong -> return null
-  return null;
+  if (!rekap || rekap.length === 0) return null;
+  return rekap.reduce((tertinggi, mhs) =>
+    mhs.nilaiAkhir > tertinggi.nilaiAkhir ? mhs : tertinggi
+  );
 }
 
 function hitungDistribusiGrade(rekap) {
-  // TODO: salin dari Lab 1
-  return { A: 0, B: 0, C: 0, D: 0, E: 0 };
+  const distribusi = { A: 0, B: 0, C: 0, D: 0, E: 0 };
+  for (const mhs of rekap) {
+    if (distribusi[mhs.grade] !== undefined) {
+      distribusi[mhs.grade]++;
+    }
+  }
+  return distribusi;
 }
 
 function cariMahasiswa(rekap, kataKunci) {
-  // TODO: salin dari Lab 1
-  return rekap;
+  if (!kataKunci || kataKunci.trim() === '') return rekap;
+  const kunci = kataKunci.toLowerCase().trim();
+  return rekap.filter(
+    (mhs) =>
+      mhs.nama.toLowerCase().includes(kunci) ||
+      mhs.nim.toLowerCase().includes(kunci)
+  );
 }
 
 // ---- Sudah jadi: validasi input mahasiswa baru (dipakai sebelum memanggil api.js) ----
